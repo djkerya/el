@@ -38,6 +38,9 @@ include_once 'header.php';
 		$board_name = ' || '.$row["board_name"]; }
 	    else {
 		$board_name = ''; }
+	    $ds_link = '';
+	    if ($row["datasheet_link"]) {
+		$ds_link = '<a href='.$row["datasheet_link"].' alt="'.$row["datasheet_link"].'">Datasheet</a>';}
 	    echo '<div class="tr"><div class="tc"> '
 	    .$row["part_mark"].' </div> <div class="tc"> '
 	    .$row["part_type"].' </div> <div class="tc"> '
@@ -45,7 +48,7 @@ include_once 'header.php';
 	    .$row["part_qty"].' </div> <div class="tc"> '
 	    .$row["on_board"].' </div> <div class="tc"> '
 	    .$row["which_board"].$board_name.' </div> <div class="tc"> '
-	    .$row["datasheet_link"].' </div><div class="tc">
+	    .$ds_link.' </div><div class="tc">
 	    <a href="/edit.php?p_id='.$row["id"].'">Edit</a></div></div>';
 	}
     ?>

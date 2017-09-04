@@ -17,7 +17,7 @@ if (isset($data['do_login'])) {
     }
     if (!empty($errors)) {
 	echo '<div style="color:red;">'.array_shift($errors).'</div><hr>';
-	var_dump($data);
+//	var_dump($data);
     }
 }
 ?>

@@ -10,48 +10,44 @@ include_once 'header.php';
 
 if ($_SESSION['logged_user']->perm == 'admin' ) {
 
-$sql = "SELECT * FROM part_types";
-$result = mysqli_query($db,$sql);
-//$row = mysqli_fetch_assoc($result);
 ?>
 <div id="container" >
-
-<?php
-$board_sql = "SELECT id,board_name FROM boards";
-$board_result=mysqli_query($db,$board_sql);
-?>
 
 <div id="part_form" class="form" style="display:none; border: 1px solid black; padding: 10px; margin: 0 10px;">
 <form method="post" action="add.php">
  Add part: <br>
  Part type: 
    <select name="part_type" id="input-part-type" />
- <?php 
- while ($row = mysqli_fetch_assoc($result)) {
-  echo '<option>'.$row["part_type"].'</option><br>';
-  }
+ <?php
+	$sql = "SELECT * FROM part_types";
+	$result = mysqli_query($db,$sql);
+	//$row = mysqli_fetch_assoc($result);
+    while ($row = mysqli_fetch_assoc($result)) {
+	echo '<option>'.$row["part_type"].'</option><br>';
+    }
 ?>
-    </select>
-  <div id="dispaly"></div>
+    </select><br>
  Part mark: <input type="text" name="part_mark" /><br>
  Part case: <input type="text" name="part_case" /><br>
+ Part qty: <input type="text" name="part_qty" /><br>
  Part description: <input type="text" name="part_desc" /><br>
  Is on board: <input type="checkbox" name="on_board" id="on_board_checkbox" /><br>
  <div id="part_form_board" style="display:none;">
     Board:
     <select name="part_wb" id="part_wb" />
 	<?php
+	    $board_sql = "SELECT id,board_name FROM boards";
+	    $board_result=mysqli_query($db,$board_sql);
 	    while ($row = mysqli_fetch_assoc($board_result)) {
 	    echo '<option>'.$row["id"].' || '.$row["board_name"].'</option><br>';
     	    }
         ?>
-    </select>
+    </select><br>
     <!--
     <input type="text" name="part_wb" value="<?php echo $part_wb; ?>" />
      -->
- </div> 
+ </div><br>
  Datasheet link: <input type="text" name="part_ds_link" /><br>
- 
  <input type="hidden" name="datetime" value="<?php echo date('Y-m-d H:i:s');?>" />
  <input type="submit" name="part_add" value="add" />
 </form>
@@ -63,6 +59,11 @@ $board_result=mysqli_query($db,$board_sql);
  Board name: <input type="text" name="board_name" id="board_name" /><br>
  Board marks: <input type="text" name="board_marks" /><br>
  Board description:<br> <textarea name="board_desc" style="width:100%;"></textarea><br>
+ <p>
+ <label for="board_file">Board image:</label>
+ <input type="file" name="board_file" id="board_file">
+ <progress id="progressbar" value="0" max="100"></progress>
+ </p>
  <input type="hidden" name="board_added" value="<?php echo date('Y-m-d H:i:s');?>" />
  <input type="submit" name="board_add" value="add" />
 </form>
@@ -93,6 +94,7 @@ if (isset($_POST['part_add'])) {
  $part_type = strip_tags(trim($_POST['part_type']));
  $part_mark = strip_tags(trim($_POST['part_mark']));
  $part_case = strip_tags(trim($_POST['part_case']));
+ $part_qty = strip_tags(trim($_POST['part_qty']));
  $part_desc = strip_tags(trim($_POST['part_desc']));
  $part_ds_link = strip_tags(trim($_POST['part_ds_link']));
  $part_wb = strip_tags(trim($_POST['part_wb']));
@@ -111,8 +113,8 @@ if (isset($_POST['part_add'])) {
  $part_type_int_assoc = mysqli_fetch_assoc($part_type_result);
  $part_type_int=$part_type_int_assoc['id'];
 // print("Part type int: ".$part_type_int."<br>");
- $sql = "INSERT INTO parts (type_id,part_mark,part_case,on_board,which_board,datasheet_link,part_desc)
-	 VALUES ('$part_type_int','$part_mark','$part_case','$on_board','$part_wb_id', '$part_ds_link','$part_desc')";
+ $sql = "INSERT INTO parts (type_id,part_mark,part_case,part_qty,on_board,which_board,datasheet_link,part_desc)
+	 VALUES ('$part_type_int','$part_mark','$part_case','$part_qty','$on_board','$part_wb_id', '$part_ds_link','$part_desc')";
 // echo "insert query: ".$sql."<br>";
 if ($part_type_int > 0 ) {
  $result = mysqli_query($db, $sql) or die(mysqli_error($db));
@@ -310,6 +312,43 @@ $("#add_part_type").click(function(){
     $(".form").hide();
     $("#part_type_form").css('display','inline-block');
 });
+
+    $(function(){
+      var progressBar = $('#progressbar');
+      $('#my_form').on('submit', function(e){
+        e.preventDefault();
+        var $that = $(this),
+            formData = new FormData($that.get(0));
+        $.ajax({
+          url: $that.attr('action'),
+          type: $that.attr('method'),
+          contentType: false,
+          processData: false,
+          data: formData,
+          dataType: 'json',
+          xhr: function(){
+            var xhr = $.ajaxSettings.xhr(); // получаем объект XMLHttpRequest
+            xhr.upload.addEventListener('progress', function(evt){ // добавляем обработчик события progress (onprogress)
+              if(evt.lengthComputable) { // если известно количество байт
+                // высчитываем процент загруженного
+                var percentComplete = Math.ceil(evt.loaded / evt.total * 100);
+                // устанавливаем значение в атрибут value тега <progress>
+                // и это же значение альтернативным текстом для браузеров, не поддерживающих <progress>
+                progressBar.val(percentComplete).text('Загружено ' + percentComplete + '%');
+              }
+            }, false);
+            return xhr;
+          },
+          success: function(json){
+            if(json){
+              $that.after(json);
+            }
+          }
+        });
+      });
+    });
+
+
 </script>
 
 <?php

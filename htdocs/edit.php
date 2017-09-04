@@ -30,6 +30,7 @@ if(isset($_POST['part_save'])) {
     $part_type_result = mysqli_query($db,$sql);
     $part_type_int_assoc = mysqli_fetch_assoc($part_type_result);
     $part_type_int=$part_type_int_assoc['id'];
+    if (!$on_board OR $on_board == 0 OR $on_board == '' ) { $part_wb_id = NULL; }
     $sql = "UPDATE parts SET type_id='$part_type_int', part_mark='$part_mark', part_case='$part_case',part_qty='$part_qty',
 	     on_board='$on_board', which_board='$part_wb_id', datasheet_link='$part_ds_link', part_desc='$part_desc'
 	      WHERE id='$part_id' ";
@@ -98,11 +99,12 @@ $result=mysqli_query($db,$sql);
 $row=mysqli_fetch_assoc($result);
 $part_type=$row['part_type'];
 $part_mark=$row['part_mark'];
-$part_case=$row['part_type'];
+$part_case=$row['part_case'];
 $part_qty=$row['part_qty'];
 $on_board=$row['on_board'];
 $part_wb=$row['which_board'];
 $part_ds_link=$row['datasheet_link'];
+$part_desc=$row['part_desc'];
 $part_form_show=1;
 } //if isset p_id
 
@@ -122,14 +124,24 @@ $board_form_show=1;
 
 <div id="conainer" style="width:100%;" >
 
-<?php
-$board_sql = "SELECT id,board_name FROM boards";
-$board_result=mysqli_query($db,$board_sql);
-?>
 <div id="part_form" style="vertical-align:top; border:1px solid black; display:none; padding: 10px;">
 <form method="post" action="edit.php">
- Part type: <input style="align:right;" type="text" name="part_type" id="input-part-type" value="<?php echo $part_type ?>" /><br>
-  <div id="dispaly"></div>
+ Part type:
+<!--
+ <input style="align:right;" type="text" name="part_type" id="input-part-type" value="<?php echo $part_type ?>" /><br>
+-->
+    <select style="align:right;" name="part_type" id="input-part-type" >
+<?php
+    $part_type_text=$part_type;
+    $part_sql = "SELECT * FROM part_types";
+    $part_result=mysqli_query($db,$part_sql);
+        while ($row = mysqli_fetch_assoc($part_result)) {
+        $selected = '';
+    	if ($part_type_text == $row['part_type']) { $selected = ' selected';}
+        	echo '<option'.$selected.'>'.$row["part_type"].'</option><br>';
+        }
+?>
+    </select><br>
  Part mark: <input  type="text" name="part_mark" value="<?php echo $part_mark; ?>" /><br>
  Part case: <input type="text" name="part_case" value="<?php echo $part_case; ?>" /><br>
  Qty: <input type="text" name="part_qty" value="<?php echo $part_qty; ?>" /><br><br>
@@ -139,9 +151,13 @@ $board_result=mysqli_query($db,$board_sql);
   Board: 
     <select name="part_wb" id="part_wb" />
     <?php
+	$board_sql = "SELECT id,board_name FROM boards";
+	$board_result=mysqli_query($db,$board_sql);
 	while ($row = mysqli_fetch_assoc($board_result)) {
-	echo '<option>'.$row["id"].' || '.$row["board_name"].'</option><br>';
-     }
+	    $selected = '';
+	    if ($part_wb == $row['id']) {$selected = ' selected';}
+	    echo '<option'.$selected.'>'.$row["id"].' || '.$row["board_name"].'</option><br>';
+        }
     ?>
      </select>
   <!--
