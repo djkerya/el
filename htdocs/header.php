@@ -31,7 +31,7 @@ margin:0 2px; float:right;}
 integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" 
 crossorigin="anonymous" defer>
 </script>
-
+<script src="events.js"></script>
 </head>
 <body>
 <div class="hm1"><a href="/">Main</a></div>
