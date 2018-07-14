@@ -48,6 +48,38 @@ if(isset($_POST['part_save'])) {
 $part_form_show=1;
 } // if isset post part_save
 
+if(isset($_POST['part_delete'])) {
+    $part_id = strip_tags(trim($_POST['part_id']));
+    $part_type = strip_tags(trim($_POST['part_type']));
+    $part_mark = strip_tags(trim($_POST['part_mark']));
+    $part_case = strip_tags(trim($_POST['part_case']));
+    $part_qty = strip_tags(trim($_POST['part_qty']));
+    $part_wb = strip_tags(trim($_POST['part_wb']));
+    $part_wb_explode = explode('||', $part_wb);
+    $part_wb_id = $part_wb_explode[0];
+    $part_wb_name = $part_wb_explode[1];
+    $part_ds_link= strip_tags(trim($_POST['part_ds_link']));
+    $part_desc= strip_tags(trim($_POST['part_desc']));
+    if (isset($_POST['on_board'])) {
+		$on_board = 1;
+		}
+     else {
+		$on_board = 0;
+    }
+    if (!$on_board OR $on_board == 0 OR $on_board == '' ) { $part_wb_id = NULL; }
+    $sql = "DELETE FROM parts WHERE id='$part_id' ";
+	mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+	$result = mysqli_query($db, $sql) or trigger_error(mysqli_error($db)." in ".$sql);
+	//mysqli_close($db);
+	if (!$result) {
+         printf("%s\n", mysqli_error($db));
+         exit();
+        } else {
+    echo "Deleted successfuly";
+    }
+    $part_form_show=1;
+} // if isset post part_delete
+
 
 if(isset($_POST['board_save'])) {
     $board_id = strip_tags(trim($_POST['board_id']));
@@ -171,6 +203,7 @@ $board_form_show=1;
  <input type="hidden" name="part_id" value="<?php echo $part_id; ?>">
  <input type="hidden" name="board_id" value="<?php echo $board_id; ?>">
  <input type="submit" name="part_save" value="Save" />
+  <input type="submit" name="part_delete" value="Delete" />
 </form>
 </div>
 
