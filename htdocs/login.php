@@ -21,11 +21,12 @@ if (isset($data['do_login'])) {
     }
 }
 ?>
-
-<form action="login.php" method="POST">
+<div style="dispaly:table; text-align:center; vertical-align:middle;">
+<form style="display: table; border: 1px dotted; padding: 10px; margin:auto;" action="login.php" method="POST">
     Login:
-    <input type="text" name="login" vaule="<?php echo @$data['login']; ?>"><br>
+    <input style="display:block; position:relative; float:right; margin:0 0 0 5px; border: 1px dotted #999;" type="text" name="login" vaule="<?php echo @$data['login']; ?>"><br><br>
     Password:
-    <input type="password" name="password" vaule="<?php echo @$data['password']; ?>"><br>
-    <button type="submit" name="do_login">Login</button>
+    <input style="display:block; position:relative; float:right; margin:0 0 0 5px;border: 1px dotted #999;" type="password" name="password" vaule="<?php echo @$data['password']; ?>"><br>
+    <button style="display:block; position:relative; float:right; margin: 10px 0 0 0;" type="submit" name="do_login">Login</button>
 </form>
+</div>

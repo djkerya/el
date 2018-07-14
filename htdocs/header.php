@@ -16,6 +16,9 @@
 .tc {display:table-cell; padding:1px 4px;border: 1px dotted green; }
 .ib {display:inline-block; border: 1px solid blue; padding: 1px 4px;}
 .l {cursor:pointer;}
+.hm1 {display:inline-block;border:1px dotted; padding: 0 5px;}
+.hm2 {display:inline-block;border:1px dotted; padding: 0 5px;
+margin:0 2px; float:right;}
 </style>
 <!-- jQuery (neccessary for Bootstrap s JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" ></script>
@@ -31,13 +34,14 @@ crossorigin="anonymous" defer>
 
 </head>
 <body>
+<div class="hm1"><a href="/">Main</a></div>
 <?php
  if (isset($_SESSION['logged_user'])) : ?>
- Logged as: <?php echo $_SESSION['logged_user']->login.
+ <div class="hm2">Logged as: <?php echo $_SESSION['logged_user']->login.
 		    " (".$_SESSION['logged_user']->perm.")"; ?>
-		    <a href="logout.php">Logout</a>
+		    <a href="logout.php">Logout</a></div>
  <?php else : ?>
-    <a href="/login.php">Login</a><br>
-    <a href="/signup.php">Signup</a>
+    <div class="hm2"><a href="/login.php">Login</a></div>
+    <div class="hm2"><a href="/signup.php">Signup</a></div>
  <?php endif; ?>
 <hr>
