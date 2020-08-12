@@ -211,7 +211,8 @@ $board_form_show=1;
 <form method="post" action="edit.php">
  Board name: <input  type="text" name="board_name" value="<?php echo $board_name; ?>" /><br>
  Board marks: <input type="text" name="board_marks" value="<?php echo $board_marks; ?>" /><br>
- board desc <input type="text" name="board_desc" value="<?php echo $board_desc; ?>" /><br>
+ Board desc: <input type="text" name="board_desc" value="<?php echo $board_desc; ?>" /><br><br>
+ Board added: <span style="border:1px dashed; margin: 5px; padding: 5px;"><?php echo $board_added; ?></span><br>
  <input type="hidden" name="board_id" value="<?php echo $board_id; ?>"><br>
  <input type="submit" name="board_save" value="Save" />
  <input type="submit" name="board_delete" value="Delete" />
