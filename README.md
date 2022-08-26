@@ -1,4 +1,6 @@
 # el
-Primitive php electronic components database
+Primitive electronic components database written in php.
 
-http://el.dev.kerya.net
+Allows to store components such as transistors, ICs, capcitor ant others.
+
+https://el.dev.kerya.net
