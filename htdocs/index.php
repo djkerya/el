@@ -81,7 +81,9 @@ include_once 'header.php';
     mysqli_close($db);
     ?>
     </div>
-    </div>
+    </div><br>
+    <a href="" id="addBoard">Add a board</a>
+    <div id="testdiv" style="border:1px dotted">test</div>
 
    </div> <!-- col-md-3 -->
   </div> <!-- col-md-9 -->

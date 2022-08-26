@@ -45,5 +45,10 @@ $(document).ready(function() {
    $("#login-alert").html("<i class='fa fa-exclamation-triangle' aria-hidden='true'></i> Username/Email &amp; Password required!"),
    $("#login-alert").show('fast')), !1
 })
+    var i=1;
+    $('#addBoard').click(function(){
+	i++;
+	$("#testdiv").printThis(i);
+    });
 });
 
